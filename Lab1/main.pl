@@ -53,11 +53,28 @@ female(tsygonyaeva_elena).
 female(tsygonyaeva_tatiana).
 female(tsygonyaeva_anna).
 
+spouse(anischenko_alexey, anischenko_julia).
+spouse(anischenko_olga, anischenko_vitaliy).
+spouse(kukushkin_michail, kukushkina_tatiana).
+spouse(drobov_aleksandr, drobova_nina).
+spouse(kukushkin_pavel, kukushkina_vera).
+spouse(tsygonyaeva_elena, tsygonyaev_yuriy).
+spouse(tsygonyaev_alexey, tsygonyaeva_tatiana).
+spouse(tsygonyaeva_anna, tsygonyaev_vitaliy).
+
+
+spouse(X, Y) :- 
+	spouse(Y, X).
 
 predecessor(X, Y) :- parent(X, Y).
 predecessor(X, Y) :- parent(Z, Y), predecessor(X, Z).
 
-relatives(X, Y) :- predecessor(X, Y); predecessor(Y, X); predecessor(Z, X), predecessor(Z, Y).
+relatives(X, Y) :- X \= Y, (predecessor(X, Y); predecessor(Z, X), predecessor(Z, Y)).
+relatives(X, Y) :- 
+	spouse(Z, Y), 
+	relatives(X, Z).
+relatives(X, Y) :- 
+	relatives(Y, X).
 
 grandparent(X, Y) :- parent(Z, Y), parent(X, Z).
 great_grandparent(X, Y) :- grandparent(Z, Y), parent(X, Z).
@@ -65,6 +82,8 @@ sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
 uncle_or_aunt(X, Y) :- sibling(X, Z), parent(Z, Y).
 great_uncle_or_aunt(X, Y) :- uncle_or_aunt(X, Z), parent(Z, Y).
 
+wife(X, Y) :- spouse(X, Y), female(X).
+husband(X, Y) :- spouse(X, Y), male(X).
 father(X, Y) :- male(X), parent(X, Y).
 mother(X, Y) :- female(X), parent(X, Y).
 grandfather(X, Y) :- male(X), grandparent(X, Y).
