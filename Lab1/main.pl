@@ -69,7 +69,12 @@ spouse(X, Y) :-
 predecessor(X, Y) :- parent(X, Y).
 predecessor(X, Y) :- parent(Z, Y), predecessor(X, Z).
 
-relatives(X, Y) :- X \= Y, (predecessor(X, Y); predecessor(Z, X), predecessor(Z, Y)).
+relatives(X, Y) :- 
+	X \= Y, 
+	(
+		predecessor(X, Y); 
+		predecessor(Z, X), predecessor(Z, Y)
+	).
 relatives(X, Y) :- 
 	spouse(Z, Y), 
 	relatives(X, Z).
@@ -106,6 +111,17 @@ great_uncle(X, Y) :- male(X), great_uncle_or_aunt(X, Y).
 great_aunt(X, Y) :- female(X), great_uncle_or_aunt(X, Y).
 great_nephew(X, Y) :- male(X), great_uncle_or_aunt(Y, X).
 great_niece(X, Y) :- female(X), great_uncle_or_aunt(Y, X).
-first_cousin(X, Y) :- grandparent(Z, X), grandparent(Z, Y), X \= Y, not(sibling(X, Y)). 
-second_cousin(X, Y) :- great_grandparent(Z, X), great_grandparent(Z, Y), X \= Y, not(sibling(X, Y)), not(first_cousin(X, Y)). 
-first_cousin_once_removed(X, Y) :- (first_cousin(Z, X), parent(Z, Y)); (first_cousin(Z, Y), parent(Z, X)).
+first_cousin(X, Y) :-
+	X \= Y, 
+	not(sibling(X, Y)), 
+	grandparent(Z, X), 
+	grandparent(Z, Y). 
+second_cousin(X, Y) :- 
+	X \= Y, 
+	not(sibling(X, Y)), 
+	not(first_cousin(X, Y)),
+	great_grandparent(Z, X), 
+	great_grandparent(Z, Y). 
+first_cousin_once_removed(X, Y) :- 
+	(first_cousin(Z, X), parent(Z, Y)); 
+	(first_cousin(Z, Y), parent(Z, X)).
