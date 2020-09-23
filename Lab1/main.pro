@@ -1,3 +1,5 @@
+:- set_prolog_flag(occurs_check, error).        % disallow cyclic terms
+
 parent(anischenko_alexey, anischenko_anatoliy).
 parent(anischenko_julia, anischenko_anatoliy).
 parent(anischenko_alexey, anischenko_timofey).
